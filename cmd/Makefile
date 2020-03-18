@@ -37,6 +37,7 @@ strip:
 	strip $(OUT)
 
 clean:
+	rm $(OUT)
 	$(GO) clean -x -i
 
 flush-cache:
