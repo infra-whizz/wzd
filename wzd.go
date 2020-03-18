@@ -1,9 +1,11 @@
 package wzd
 
 import (
-	"github.com/infra-whizz/wzd/transport"
-	"github.com/nats-io/nats.go"
 	"log"
+	"time"
+
+	wzd_transport "github.com/infra-whizz/wzd/transport"
+	"github.com/nats-io/nats.go"
 )
 
 const (
@@ -67,6 +69,12 @@ func (wd *WzDaemon) Run() *WzDaemon {
 	wd.status.Running = true
 
 	return wd
+}
+
+func (wd *WzDaemon) AppLoop() {
+	for {
+		time.Sleep(10 * time.Second)
+	}
 }
 
 // Stop wzd

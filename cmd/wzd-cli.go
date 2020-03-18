@@ -1,10 +1,11 @@
 package main
 
 import (
+	"os"
+
 	"github.com/infra-whizz/wzd"
 	"github.com/isbm/go-nanoconf"
 	"github.com/urfave/cli/v2"
-	"os"
 )
 
 func run(ctx *cli.Context) error {
@@ -13,7 +14,7 @@ func run(ctx *cli.Context) error {
 	daemon.GetTransport().AddNatsServerURL(
 		config.Find("transport").String("host", ""),
 		config.Find("transport").DefaultInt("port", "", 4222))
-	daemon.Run()
+	daemon.Run().AppLoop()
 
 	//cli.ShowAppHelpAndExit(ctx, 2)
 	return nil
