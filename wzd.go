@@ -4,7 +4,7 @@ import (
 	"log"
 	"time"
 
-	wzd_transport "github.com/infra-whizz/wzd/transport"
+	wzd_transport "github.com/infra-whizz/wzlib/transport"
 	"github.com/nats-io/nats.go"
 )
 
