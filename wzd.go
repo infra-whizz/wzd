@@ -4,13 +4,9 @@ import (
 	"log"
 	"time"
 
-	wzd_transport "github.com/infra-whizz/wzlib/transport"
+	wzlib "github.com/infra-whizz/wzlib"
+	wzlib_transport "github.com/infra-whizz/wzlib/transport"
 	"github.com/nats-io/nats.go"
-)
-
-const (
-	CHANNEL_PUBLIC     = "public"
-	CHANNEL_CONTROLLER = "controller"
 )
 
 type WzDaemonStatus struct {
@@ -19,7 +15,7 @@ type WzDaemonStatus struct {
 
 type WzDaemon struct {
 	status                 *WzDaemonStatus
-	transport              *wzd_transport.WzdPubSub
+	transport              *wzlib_transport.WzdPubSub
 	publicSubscription     *nats.Subscription
 	controllerSubscription *nats.Subscription
 }
@@ -28,7 +24,7 @@ type WzDaemon struct {
 func NewWzDaemon() *WzDaemon {
 	wd := new(WzDaemon)
 	wd.status = &WzDaemonStatus{}
-	wd.transport = wzd_transport.NewWizPubSub()
+	wd.transport = wzlib_transport.NewWizPubSub()
 
 	return wd
 }
@@ -42,7 +38,7 @@ func (wd *WzDaemon) onControllerEvent(m *nats.Msg) {
 }
 
 // GetTransport return transport object
-func (wd *WzDaemon) GetTransport() *wzd_transport.WzdPubSub {
+func (wd *WzDaemon) GetTransport() *wzlib_transport.WzdPubSub {
 	return wd.transport
 }
 
@@ -58,11 +54,11 @@ func (wd *WzDaemon) Run() *WzDaemon {
 
 	var err error
 	wd.GetTransport().Start()
-	wd.publicSubscription, err = wd.GetTransport().GetSubscriber().Subscribe(CHANNEL_PUBLIC, wd.onPublicEvent)
+	wd.publicSubscription, err = wd.GetTransport().GetSubscriber().Subscribe(wzlib.CHANNEL_PUBLIC, wd.onPublicEvent)
 	if err != nil {
 		log.Panicln("Unable to subscribe to a public channel:", err.Error())
 	}
-	wd.controllerSubscription, err = wd.GetTransport().GetSubscriber().Subscribe(CHANNEL_CONTROLLER, wd.onControllerEvent)
+	wd.controllerSubscription, err = wd.GetTransport().GetSubscriber().Subscribe(wzlib.CHANNEL_CONTROLLER, wd.onControllerEvent)
 	if err != nil {
 		log.Panicln("Unable to subscribe to a controller channel:", err.Error())
 	}
