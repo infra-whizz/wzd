@@ -8,5 +8,5 @@ require (
 	github.com/nats-io/jwt v0.3.2 // indirect
 	github.com/nats-io/nats.go v1.9.1
 	github.com/urfave/cli/v2 v2.2.0
-	golang.org/x/crypto v0.0.0-20200311171314-f7b00557c8c4 // indirect
+	golang.org/x/crypto v0.0.0-20200317142112-1b76d66859c6 // indirect
 )
