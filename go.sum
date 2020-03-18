@@ -10,8 +10,6 @@ github.com/go-yaml/yaml v2.1.0+incompatible/go.mod h1:w2MrLa16VYP0jy6N7M5kHaCkaL
 github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/golang/protobuf v1.3.5 h1:F768QJ1E9tib+q5Sc8MkdJi1RxLTbRcTf8LJV56aRls=
 github.com/golang/protobuf v1.3.5/go.mod h1:6O5/vntMXwX2lRkT1hjjk0nAC1IDOTvTlVgjlRvqsdk=
-github.com/infra-whizz/wzlib v0.0.0-20200318203907-963f00069714 h1:oHYJWsWnjXeS3UF8HrSLh8pYPzrJi1kDWKc46a8NU2A=
-github.com/infra-whizz/wzlib v0.0.0-20200318203907-963f00069714/go.mod h1:3LQtEs2IjqEky5kr2RdiH1Dv11ze/u/p0P0yA/+bt5w=
 github.com/isbm/go-nanoconf v0.0.0-20200219130459-fc328232826c h1:aw4pgmZEAKkZUqGkMFmsgEWK2/0/QrEIHXElGu32Z7g=
 github.com/isbm/go-nanoconf v0.0.0-20200219130459-fc328232826c/go.mod h1:NeA3Yw/eieQ0XqBiftpafMaFVSwMgafNtjiLze95tys=
 github.com/kr/pretty v0.2.0 h1:s5hAObm+yFO5uHYt5dYjxi2rXrsnmRpJx4OYvIWUaQs=
