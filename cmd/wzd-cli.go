@@ -11,6 +11,8 @@ import (
 func run(ctx *cli.Context) error {
 	config := nanoconf.NewConfig(ctx.String("config"))
 	daemon := wzd.NewWzDaemon()
+	daemon.SetPkiDirectory(config.Find("daemon").String("pki", ""))
+	daemon.SetTraitsFile(config.Find("daemon").String("traits", ""))
 	daemon.GetTransport().AddNatsServerURL(
 		config.Find("transport").String("host", ""),
 		config.Find("transport").DefaultInt("port", "", 4222))
