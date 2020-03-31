@@ -92,6 +92,7 @@ func (wd *WzDaemonBoot) sendRegistrationRequest() {
 	envelope := wzlib_transport.NewWzMessage(wzlib_transport.MSGTYPE_REGISTRATION)
 	envelope.Payload["RSA.pub"] = pem
 	envelope.Payload["system.id"] = wd.daemon.GetTraits().GetContainer().Get("uid")
+	envelope.Payload["system.fqdn"] = wd.daemon.GetTraits().GetContainer().Get("hostname")
 
 	msg, err := envelope.Serialise()
 	if err != nil {
