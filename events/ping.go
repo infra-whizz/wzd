@@ -35,12 +35,12 @@ func NewWzPingEvent(transport *wzlib_transport.WzdPubSub, uid string) *WzPingEve
 
 // Update ping event container by message handler
 func (pe *WzPingEvent) Update(msg *wzlib_transport.WzGenericMessage) {
-	uid := msg.Payload["system.id"].(string)
+	uid := msg.Payload[wzlib_transport.PAYLOAD_SYSTEM_ID].(string)
 	if pe.uid != uid {
 		return
 	}
 
-	pingId, ok := msg.Payload["ping.id"]
+	pingId, ok := msg.Payload[wzlib_transport.PAYLOAD_PING_ID]
 	if !ok {
 		log.Println("Ping message contains no 'ping.id' section!")
 	} else {
@@ -68,8 +68,8 @@ func (pe *WzPingEvent) ping(channel string) string {
 		Responded: false})
 
 	envelope := wzlib_transport.NewWzMessage(wzlib_transport.MSGTYPE_PING)
-	envelope.Payload["system.id"] = pe.uid
-	envelope.Payload["ping.id"] = pingId
+	envelope.Payload[wzlib_transport.PAYLOAD_SYSTEM_ID] = pe.uid
+	envelope.Payload[wzlib_transport.PAYLOAD_PING_ID] = pingId
 
 	msg, _ := envelope.Serialise()
 	if err := pe.transport.GetPublisher().Publish(channel, msg); err != nil {
