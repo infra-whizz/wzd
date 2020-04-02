@@ -2,13 +2,12 @@ package wzd_events
 
 import (
 	"fmt"
-	"log"
 	"time"
 
-	cmap "github.com/orcaman/concurrent-map"
-
 	"github.com/infra-whizz/wzlib"
+	wzlib_logger "github.com/infra-whizz/wzlib/logger"
 	wzlib_transport "github.com/infra-whizz/wzlib/transport"
+	cmap "github.com/orcaman/concurrent-map"
 )
 
 type WzPingStat struct {
