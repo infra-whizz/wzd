@@ -1,12 +1,12 @@
 package wzd
 
 import (
-	"log"
 	"time"
 
 	wzd_events "github.com/infra-whizz/wzd/events"
 	wzlib "github.com/infra-whizz/wzlib"
 	wzlib_crypto "github.com/infra-whizz/wzlib/crypto"
+	wzlib_logger "github.com/infra-whizz/wzlib/logger"
 	wzlib_traits "github.com/infra-whizz/wzlib/traits"
 	wzlib_traits_attributes "github.com/infra-whizz/wzlib/traits/attributes"
 	wzlib_transport "github.com/infra-whizz/wzlib/transport"
@@ -30,6 +30,8 @@ type WzDaemon struct {
 
 	// Services
 	pingService *wzd_events.WzPingEvent
+
+	wzlib_logger.WzLogger
 }
 
 // Constructor
@@ -105,11 +107,11 @@ func (wd *WzDaemon) Run() *WzDaemon {
 	wd.GetTransport().Start()
 	wd.publicSubscription, err = wd.GetTransport().GetSubscriber().Subscribe(wzlib.CHANNEL_PUBLIC, wd.events.OnPublicEvent)
 	if err != nil {
-		log.Panicln("Unable to subscribe to a public channel:", err.Error())
+		wd.GetLogger().Panicln("Unable to subscribe to a public channel:", err.Error())
 	}
 	wd.controllerSubscription, err = wd.GetTransport().GetSubscriber().Subscribe(wzlib.CHANNEL_CONTROLLER, wd.events.OnControllerEvent)
 	if err != nil {
-		log.Panicln("Unable to subscribe to a controller channel:", err.Error())
+		wd.GetLogger().Panicln("Unable to subscribe to a controller channel:", err.Error())
 	}
 	wd.status.Running = true
 
@@ -127,7 +129,7 @@ func (wd *WzDaemon) AppLoop() {
 // Stop wzd
 func (wd *WzDaemon) Stop() {
 	if err := wd.GetTransport().GetSubscriber().Drain(); err != nil {
-		panic("Drain error: " + err.Error())
+		wd.GetLogger().Panicln("Drain error: " + err.Error())
 	}
 	wd.status.Running = false
 }

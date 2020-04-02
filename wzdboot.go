@@ -1,15 +1,15 @@
 package wzd
 
 import (
-	"log"
-
 	"github.com/infra-whizz/wzlib"
+	wzlib_logger "github.com/infra-whizz/wzlib/logger"
 	wzlib_transport "github.com/infra-whizz/wzlib/transport"
 )
 
 type WzDaemonBoot struct {
 	pkiDir string
 	daemon *WzDaemon
+	wzlib_logger.WzLogger
 }
 
 func NewWzDaemonBoot(daemon *WzDaemon) *WzDaemonBoot {
@@ -24,9 +24,9 @@ func (wd *WzDaemonBoot) waitForController() {
 	for {
 		latency, err := ping.Ping("controller node", seconds)
 		if err != nil {
-			log.Println("Controller timeout. Trying again for", seconds, "seconds.")
+			wd.GetLogger().Warningln("Controller timeout. Trying again for", seconds, "seconds.")
 		} else {
-			log.Println("Latency:", latency)
+			wd.GetLogger().Warningln("Latency:", latency)
 			break
 		}
 	}
@@ -35,12 +35,12 @@ func (wd *WzDaemonBoot) waitForController() {
 // onClientBoot is when the client is booting up
 func (wdb *WzDaemonBoot) onClientBoot() {
 	if wdb.daemon.GetTraits() == nil {
-		panic("Traits were not initalised")
+		wdb.GetLogger().Panicln("Traits were not initalised")
 	}
 	// Check if this client has AES key
 	rsa, aes := wdb.pkiVerify()
-	log.Println("PKI check. RSA:", rsa)
-	log.Println("PKI check. AES:", aes)
+	wdb.GetLogger().Infoln("PKI check. RSA:", rsa)
+	wdb.GetLogger().Infoln("PKI check. AES:", aes)
 
 	wdb.waitForController()
 
@@ -48,7 +48,7 @@ func (wdb *WzDaemonBoot) onClientBoot() {
 		// Generate key pair, if none
 		if !rsa {
 			if err := wdb.daemon.GetRSA().GenerateKeyPair(wdb.pkiDir); err != nil {
-				log.Fatalln(err.Error()) // Game over, no PKI possible.
+				wdb.GetLogger().Fatalln(err.Error()) // Game over, no PKI possible.
 			}
 		}
 
@@ -69,7 +69,7 @@ func (wd *WzDaemonBoot) pkiVerify() (rsa bool, aes bool) {
 	// Check AES
 	if !wd.daemon.GetAES().IsLoaded() {
 		if err := wd.daemon.GetAES().LoadKey(wd.pkiDir); err != nil {
-			log.Println(err.Error())
+			wd.GetLogger().Errorln(err.Error())
 		} else {
 			aes = true
 		}
@@ -87,7 +87,8 @@ func (wd *WzDaemonBoot) pkiVerify() (rsa bool, aes bool) {
 func (wd *WzDaemonBoot) sendRegistrationRequest() {
 	pem, err := wd.daemon.GetRSA().GetPublicPEMKey(wd.pkiDir)
 	if err != nil {
-		log.Panicln(err.Error())
+		wd.GetLogger().Errorln(err.Error())
+		return
 	}
 	envelope := wzlib_transport.NewWzMessage(wzlib_transport.MSGTYPE_REGISTRATION)
 	envelope.Payload[wzlib_transport.PAYLOAD_RSA] = pem
@@ -96,14 +97,16 @@ func (wd *WzDaemonBoot) sendRegistrationRequest() {
 
 	msg, err := envelope.Serialise()
 	if err != nil {
-		log.Panicln(err.Error())
+		wd.GetLogger().Errorln(err.Error())
+		return
 	}
 
 	err = wd.daemon.GetTransport().GetPublisher().Publish(wzlib.CHANNEL_CLIENT, msg)
 	if err != nil {
-		log.Panicln(err.Error())
+		wd.GetLogger().Errorln(err.Error())
+		return
 	}
-	log.Println("Sent registration request to", wzlib.CHANNEL_CLIENT)
+	wd.GetLogger().Infoln("Sent registration request to", wzlib.CHANNEL_CLIENT)
 }
 
 // Sends traits map to the controller

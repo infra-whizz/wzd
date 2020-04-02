@@ -20,6 +20,7 @@ type WzPingEvent struct {
 	uid       string
 	pings     cmap.ConcurrentMap
 	transport *wzlib_transport.WzdPubSub
+	wzlib_logger.WzLogger
 }
 
 // NewWzPingEvent creates a new ping event
@@ -41,12 +42,12 @@ func (pe *WzPingEvent) Update(msg *wzlib_transport.WzGenericMessage) {
 
 	pingId, ok := msg.Payload[wzlib_transport.PAYLOAD_PING_ID]
 	if !ok {
-		log.Println("Ping message contains no 'ping.id' section!")
+		pe.GetLogger().Errorln("Ping message contains no 'ping.id' section!")
 	} else {
 		pingStatItf, ok := pe.pings.Get(pingId.(string))
 		pingStat := pingStatItf.(*WzPingStat)
 		if !ok {
-			log.Println("Unable to find ping ID for", pingId)
+			pe.GetLogger().Errorln("Unable to find ping ID for", pingId)
 		} else {
 			pingStat.Ticks = time.Now().Unix() - pingStat.Ticks
 			pingStat.Responded = true
@@ -72,7 +73,7 @@ func (pe *WzPingEvent) ping(channel string) string {
 
 	msg, _ := envelope.Serialise()
 	if err := pe.transport.GetPublisher().Publish(channel, msg); err != nil {
-		log.Println("Unable to ping controller:", err.Error())
+		pe.GetLogger().Errorln("Unable to ping controller:", err.Error())
 	}
 
 	return pingId
@@ -98,7 +99,7 @@ func (pe *WzPingEvent) waitForResponse(pingId string, descr string, seconds int)
 		if pingStat.Responded {
 			latency = pingStat.Ticks
 			pe.pings.Remove(pingId)
-			log.Println("Ping latency:", latency)
+			pe.GetLogger().Debugln("Ping latency:", latency)
 			break
 		}
 		time.Sleep(time.Millisecond)
