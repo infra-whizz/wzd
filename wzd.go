@@ -1,6 +1,7 @@
 package wzd
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -14,6 +15,29 @@ import (
 	wzlib_transport "github.com/infra-whizz/wzlib/transport"
 	"github.com/nats-io/nats.go"
 )
+
+type WzDaemonLocSockMiddleware struct {
+}
+
+func NewWzDaemonLocSockMiddleware() *WzDaemonLocSockMiddleware {
+	wdlsm := new(WzDaemonLocSockMiddleware)
+	return wdlsm
+}
+
+func (wdlsm *WzDaemonLocSockMiddleware) OnCommand(command string) string {
+	var ret string
+	switch command {
+	case "info":
+		ret = fmt.Sprintf("Whizz Client Daemon, version: 0.1a, PID: %d", os.Getpid())
+	default:
+		ret = "running"
+	}
+	return ret
+}
+
+func (wdlsm *WzDaemonLocSockMiddleware) Name() string {
+	return "Info"
+}
 
 type WzDaemonStatus struct {
 	Running bool
@@ -41,7 +65,8 @@ type WzDaemon struct {
 func NewWzDaemon() *WzDaemon {
 	wd := new(WzDaemon)
 	wd.status = &WzDaemonStatus{}
-	wd.unixSock = wzlib_sockets.NewWzLocalSocketCommunicator("/tmp/wzd.sock")
+	wd.unixSock = wzlib_sockets.NewWzLocalSocketCommunicator("/tmp/wzd.sock").
+		RegisterMiddleware(NewWzDaemonLocSockMiddleware())
 	wd.boot = NewWzDaemonBoot(wd)
 	wd.events = NewWzDaemonEvents(wd)
 	wd.transport = wzlib_transport.NewWizPubSub()
@@ -108,6 +133,7 @@ func (wd *WzDaemon) ensureSingleInstance() {
 	}
 	if wd.unixSock.IsClient() {
 		wd.GetLogger().Errorln("Another instance is running already!")
+		wd.GetLogger().Errorln("Instance info:", wd.unixSock.Request("info"))
 		os.Exit(1)
 	}
 }
