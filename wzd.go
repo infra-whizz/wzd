@@ -101,12 +101,7 @@ func (wd *WzDaemon) IsRunning() bool {
 	return wd.status.Running
 }
 
-// Run the daemon
-func (wd *WzDaemon) Run() *WzDaemon {
-	if wd.IsRunning() {
-		return wd
-	}
-
+func (wd *WzDaemon) ensureSingleInstance() {
 	err := wd.unixSock.Bind()
 	if err != nil {
 		panic(err)
@@ -115,6 +110,15 @@ func (wd *WzDaemon) Run() *WzDaemon {
 		wd.GetLogger().Errorln("Another instance is running already!")
 		os.Exit(1)
 	}
+}
+
+// Run the daemon
+func (wd *WzDaemon) Run() *WzDaemon {
+	if wd.IsRunning() {
+		return wd
+	}
+	wd.ensureSingleInstance()
+	var err error
 
 	wd.GetTransport().Start()
 	wd.publicSubscription, err = wd.GetTransport().GetSubscriber().Subscribe(wzlib.CHANNEL_PUBLIC, wd.events.OnPublicEvent)
