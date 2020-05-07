@@ -8,7 +8,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/elastic/go-windows v1.0.1 // indirect
 	github.com/golang/protobuf v1.4.1 // indirect
-	github.com/infra-whizz/wzlib v0.0.0-20200403134139-62d1734fc7fb
+	github.com/infra-whizz/wzlib v0.0.0-20200507160618-25310dbf6092
 	github.com/isbm/go-nanoconf v0.0.0-20200219130459-fc328232826c
 	github.com/nats-io/nats.go v1.9.2
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
