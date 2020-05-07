@@ -1,12 +1,14 @@
 package wzd
 
 import (
+	"os"
 	"time"
 
 	wzd_events "github.com/infra-whizz/wzd/events"
 	wzlib "github.com/infra-whizz/wzlib"
 	wzlib_crypto "github.com/infra-whizz/wzlib/crypto"
 	wzlib_logger "github.com/infra-whizz/wzlib/logger"
+	wzlib_sockets "github.com/infra-whizz/wzlib/sockets"
 	wzlib_traits "github.com/infra-whizz/wzlib/traits"
 	wzlib_traits_attributes "github.com/infra-whizz/wzlib/traits/attributes"
 	wzlib_transport "github.com/infra-whizz/wzlib/transport"
@@ -21,6 +23,7 @@ type WzDaemon struct {
 	events                 *WzDaemonEvents
 	boot                   *WzDaemonBoot
 	status                 *WzDaemonStatus
+	unixSock               *wzlib_sockets.WzLocalSocketCommunicator
 	transport              *wzlib_transport.WzdPubSub
 	traits                 *wzlib_traits.WzTraits
 	publicSubscription     *nats.Subscription
@@ -38,6 +41,7 @@ type WzDaemon struct {
 func NewWzDaemon() *WzDaemon {
 	wd := new(WzDaemon)
 	wd.status = &WzDaemonStatus{}
+	wd.unixSock = wzlib_sockets.NewWzLocalSocketCommunicator("/tmp/wzd.sock")
 	wd.boot = NewWzDaemonBoot(wd)
 	wd.events = NewWzDaemonEvents(wd)
 	wd.transport = wzlib_transport.NewWizPubSub()
@@ -103,7 +107,15 @@ func (wd *WzDaemon) Run() *WzDaemon {
 		return wd
 	}
 
-	var err error
+	err := wd.unixSock.Bind()
+	if err != nil {
+		panic(err)
+	}
+	if wd.unixSock.IsClient() {
+		wd.GetLogger().Errorln("Another instance is running already!")
+		os.Exit(1)
+	}
+
 	wd.GetTransport().Start()
 	wd.publicSubscription, err = wd.GetTransport().GetSubscriber().Subscribe(wzlib.CHANNEL_PUBLIC, wd.events.OnPublicEvent)
 	if err != nil {
