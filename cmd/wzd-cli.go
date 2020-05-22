@@ -16,6 +16,7 @@ func run(ctx *cli.Context) error {
 	daemon.GetTransport().AddNatsServerURL(
 		config.Find("transport").String("host", ""),
 		config.Find("transport").DefaultInt("port", "", 4222))
+	daemon.SetClusterFingerprint(config.Find("daemon").String("cluster-fingerprint", ""))
 	daemon.SetupMachineIdUtil("")
 	daemon.Run().AppLoop()
 
