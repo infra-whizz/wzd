@@ -5,6 +5,8 @@ import (
 	"os"
 	"time"
 
+	wzlib_utils "github.com/infra-whizz/wzlib/utils"
+
 	wzd_events "github.com/infra-whizz/wzd/events"
 	wzlib "github.com/infra-whizz/wzlib"
 	wzlib_crypto "github.com/infra-whizz/wzlib/crypto"
@@ -57,7 +59,7 @@ type WzDaemon struct {
 
 	// Services
 	pingService *wzd_events.WzPingEvent
-
+	wzlib_utils.WzMachineIDUtil
 	wzlib_logger.WzLogger
 }
 
