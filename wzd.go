@@ -1,8 +1,11 @@
 package wzd
 
 import (
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path"
 	"time"
 
 	wzlib_utils "github.com/infra-whizz/wzlib/utils"
@@ -56,6 +59,8 @@ type WzDaemon struct {
 	controllerSubscription *nats.Subscription
 	aes                    *wzlib_crypto.WzAES
 	rsa                    *wzlib_crypto.WzRSA
+	crypto                 *wzlib_crypto.WzCryptoUtils
+	clusterFingerprint     string
 
 	// Services
 	pingService *wzd_events.WzPingEvent
@@ -78,10 +83,42 @@ func NewWzDaemon() *WzDaemon {
 	return wd
 }
 
-// Sets PKI directory
+// SetPkiDirectory to define where to store/work-with for PKI artifacts
 func (wd *WzDaemon) SetPkiDirectory(dirname string) *WzDaemon {
 	wd.boot.pkiDir = dirname
 	return wd
+}
+
+// GetPkiDirectory which hold all the keys for the daemon
+func (wd *WzDaemon) GetPkiDirectory() string {
+	return wd.boot.pkiDir
+}
+
+// SetClusterFingerprint sets configured fingerprint of a public RSA key,
+// representing trusted cluster components. This value is coming from the configuration file.
+func (wd *WzDaemon) SetClusterFingerprint(fp string) *WzDaemon {
+	wd.clusterFingerprint = fp
+	return wd
+}
+
+// GetClusterFingerprint returns a configured known fingerprint of a public RSA key of a cluster
+func (wd *WzDaemon) GetClusterFingerprint() string {
+	return wd.clusterFingerprint
+}
+
+// SaveClusterPublicPEMKey to the PKI directory as cluster.pub.pem
+func (wd *WzDaemon) SaveClusterPublicPEMKey(pem []byte) (int, error) {
+	clusterPubPEMPath := path.Join(wd.GetPkiDirectory(), "cluster.pub.pem")
+	if !wzlib_utils.FileExists(clusterPubPEMPath) {
+		err := ioutil.WriteFile(clusterPubPEMPath, pem, 0600)
+		if err != nil {
+			return wzlib_utils.EX_GENERIC, err
+		} else {
+			return wzlib_utils.EX_OK, err
+		}
+	} else {
+		return wzlib_utils.EX_TEMPFAIL, errors.New("File already exists")
+	}
 }
 
 // SetTraitsFile initialises traits instance in the boot sub-object
@@ -112,6 +149,11 @@ func (wd *WzDaemon) GetAES() *wzlib_crypto.WzAES {
 // GetRSA returns RSA utility API
 func (wd *WzDaemon) GetRSA() *wzlib_crypto.WzRSA {
 	return wd.rsa
+}
+
+// GetCryptoUtils returns an instance of PKI utils
+func (wd *WzDaemon) GetCryptoUtils() *wzlib_crypto.WzCryptoUtils {
+	return wd.crypto
 }
 
 // GetTransport return transport object
