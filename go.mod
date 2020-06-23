@@ -8,8 +8,8 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/elastic/go-windows v1.0.1 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/infra-whizz/wzlib v0.0.0-20200522221756-991b3d757099
-	github.com/isbm/go-nanoconf v0.0.0-20200219130459-fc328232826c
+	github.com/infra-whizz/wzlib v0.0.0-20200622182529-c99727f3707a
+	github.com/isbm/go-nanoconf v0.0.0-20200622185509-c26b634e6ead
 	github.com/nats-io/jwt v1.0.1 // indirect
 	github.com/nats-io/nats.go v1.10.0
 	github.com/nats-io/nkeys v0.2.0 // indirect
@@ -20,9 +20,9 @@ require (
 	github.com/sirupsen/logrus v1.6.0 // indirect
 	github.com/urfave/cli/v2 v2.2.0
 	github.com/vmihailenco/msgpack/v4 v4.3.12 // indirect
-	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9 // indirect
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9 // indirect
 	golang.org/x/net v0.0.0-20200602114024-627f9648deb9 // indirect
-	golang.org/x/sys v0.0.0-20200620081246-981b61492c35 // indirect
+	golang.org/x/sys v0.0.0-20200622214017-ed371f2e16b4 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/protobuf v1.24.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
@@ -30,3 +30,5 @@ require (
 )
 
 replace github.com/infra-whizz/wzlib => ../wzlib
+
+replace github.com/isbm/go-nanoconf => ../go-nanoconf
