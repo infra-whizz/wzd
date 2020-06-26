@@ -19,19 +19,27 @@ func runDummy(ctx *cli.Context) error {
 }
 
 func runLocal(ctx *cli.Context) error {
-	stateFile := ctx.String("state")
+	stateId := ctx.String("state")
+	stateDir := ctx.String("dir")
 
-	if stateFile == "" {
+	if stateId == "" || stateDir == "" {
 		if err := cli.ShowSubcommandHelp(ctx); err != nil {
 			panic("This should not happen")
 		}
-		fmt.Println("Error: State file was not specified\n")
+		var what string
+		if stateId == "" {
+			what = "file"
+		} else {
+			what = "root directory"
+		}
+		fmt.Printf("Error: State %s was not specified", what)
 		os.Exit(wzlib_utils.EX_USAGE)
 	}
 
-	cms := wzd_runner.NewWzCMS()
-	cms.SetStateRoot(ctx.String("state-dir"))
-	cms.Call(stateFile)
+	cms := wzd_runner.NewWzCMS(stateDir)
+	errcode, resp := cms.OfflineCallById(stateId)
+	fmt.Println("Error code:", errcode)
+	fmt.Println("Response:", resp)
 
 	return nil
 }
@@ -73,12 +81,6 @@ func main() {
 				Usage:    "Path to configuration file",
 				Required: false,
 			},
-			&cli.StringFlag{
-				Name:     "state",
-				Aliases:  []string{"s"},
-				Usage:    "The name of the state",
-				Required: false,
-			},
 		},
 	}
 	app.Commands = []*cli.Command{
@@ -87,9 +89,14 @@ func main() {
 			Usage:  "Run local state (in-place orchestration)",
 			Action: runLocal,
 			Flags: []cli.Flag{
-				&cli.BoolFlag{
-					Name:    "state-dir",
+				&cli.StringFlag{
+					Name:    "dir",
 					Usage:   "Path to the static local root of states",
+					Aliases: []string{"d"},
+				},
+				&cli.StringFlag{
+					Name:    "state",
+					Usage:   "The name of the state",
 					Aliases: []string{"s"},
 				},
 			},
