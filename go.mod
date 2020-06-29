@@ -9,8 +9,9 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/elastic/go-windows v1.0.1 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/infra-whizz/wzcmslib v0.0.0-20200625161412-a6c7d7d039b5
+	github.com/infra-whizz/wzcmslib v0.0.0-20200626175706-ba7a0088ce0d
 	github.com/infra-whizz/wzlib v0.0.0-20200622182529-c99727f3707a
+	github.com/infra-whizz/wzmodlib v0.0.0-00010101000000-000000000000
 	github.com/isbm/go-nanoconf v0.0.0-20200623180822-caf90de1965e
 	github.com/nats-io/jwt v1.0.1 // indirect
 	github.com/nats-io/nats.go v1.10.0
@@ -37,3 +38,5 @@ replace github.com/infra-whizz/wzlib => ../wzlib
 replace github.com/isbm/go-nanoconf => ../go-nanoconf
 
 replace github.com/infra-whizz/wzcmslib => ../wzcmslib
+
+replace github.com/infra-whizz/wzmodlib => ../wzmodlib
