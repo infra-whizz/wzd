@@ -9,8 +9,9 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/elastic/go-windows v1.0.1 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/infra-whizz/wzcmslib v0.0.0-20200629153348-2cd07ac6fe21
-	github.com/infra-whizz/wzlib v0.0.0-20200629160001-37cd698f6d29
+	github.com/infra-whizz/wzcmslib v0.0.0-20200629191648-850d52dcbd4e
+	github.com/infra-whizz/wzlib v0.0.0-20200630192324-59872deadc1a
+	github.com/infra-whizz/wzmodlib v0.0.0-00010101000000-000000000000 // indirect
 	github.com/isbm/go-nanoconf v0.0.0-20200623180822-caf90de1965e
 	github.com/nats-io/jwt v1.0.1 // indirect
 	github.com/nats-io/nats.go v1.10.0
@@ -18,12 +19,13 @@ require (
 	github.com/orcaman/concurrent-map v0.0.0-20190826125027-8c72a8bb44f6
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/procfs v0.1.3 // indirect
-	github.com/shirou/gopsutil v2.20.5+incompatible // indirect
+	github.com/shirou/gopsutil v2.20.6+incompatible // indirect
 	github.com/sirupsen/logrus v1.6.0 // indirect
 	github.com/urfave/cli/v2 v2.2.0
 	github.com/vmihailenco/msgpack/v4 v4.3.12 // indirect
-	go.starlark.net v0.0.0-20200619143648-50ca820fafb9 // indirect
-	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
+	go.starlark.net v0.0.0-20200707032745-474f21a9602d // indirect
+	golang.org/x/crypto v0.0.0-20200707235045-ab33eee955e0 // indirect
+	golang.org/x/net v0.0.0-20200707034311-ab3426394381 // indirect
 	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
