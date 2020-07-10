@@ -1,8 +1,6 @@
 package wzd_runner
 
 import (
-	"fmt"
-
 	wzlib_utils "github.com/infra-whizz/wzlib/utils"
 
 	nanocms_runners "github.com/infra-whizz/wzcmslib/nanorunners"
@@ -26,7 +24,6 @@ func NewWzCMS(path ...string) *WzCMS {
 func (cms *WzCMS) localCall(meta *nanocms_state.NanoStateMeta) (int, string) {
 	var err error = nil
 	cmp := nanocms_compiler.NewNstCompiler()
-	fmt.Println(meta.Path)
 	if err = cmp.LoadFile(meta.Path); err != nil {
 		return wzlib_utils.EX_GENERIC, err.Error()
 	}
