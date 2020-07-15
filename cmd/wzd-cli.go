@@ -37,9 +37,10 @@ func runLocal(ctx *cli.Context) error {
 	}
 
 	cms := wzd_runner.NewWzCMS(stateDir)
-	errcode, resp := cms.OfflineCallById(stateId)
-	fmt.Println("Error code:", errcode)
-	fmt.Println("Response:", resp)
+	_, res, _ := cms.OfflineCallById(stateId)
+	for _, logEntry := range res {
+		logEntry.Log()
+	}
 
 	return nil
 }

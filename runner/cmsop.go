@@ -2,6 +2,7 @@ package wzd_runner
 
 import (
 	nanocms_runners "github.com/infra-whizz/wzcmslib/nanorunners"
+	nanocms_results "github.com/infra-whizz/wzcmslib/nanorunners/results"
 	nanocms_state "github.com/infra-whizz/wzcmslib/nanostate"
 	wzlib_utils "github.com/infra-whizz/wzlib/utils"
 )
@@ -20,25 +21,28 @@ func NewWzCMS(path ...string) *WzCMS {
 }
 
 // Call a loaded and compiled state
-func (cms *WzCMS) localCall(meta *nanocms_state.NanoStateMeta) (int, string) {
+func (cms *WzCMS) localCall(meta *nanocms_state.NanoStateMeta) (int, []*nanocms_results.ResultLogEntry, error) {
 	retcode, err := cms.compiler.Compile(meta.Path)
 	if err != nil {
-		return retcode, err.Error()
+		return retcode, nil, err
 	}
 
 	localRunner := nanocms_runners.NewLocalRunner()
 	localRunner.AddStateRoots(cms.compiler.GetStateIndex().GetStateRoots()...)
 	localRunner.Run(cms.compiler.GetState())
-	return localRunner.Errcode(), localRunner.Response().PrettyJSON()
+
+	results := nanocms_results.NewResultsToLog().LoadResults(localRunner.Response()).ToLog()
+
+	return localRunner.Errcode(), results, nil
 
 }
 
 // OfflineCallById state by the Id from the completely downloaded state tree.
 // If some reference files aren't there, this call supposed to fail.
-func (cms *WzCMS) OfflineCallById(stateId string) (int, string) {
+func (cms *WzCMS) OfflineCallById(stateId string) (int, []*nanocms_results.ResultLogEntry, error) {
 	meta, err := cms.compiler.GetStateIndex().GetStateById(stateId)
 	if err != nil {
-		return wzlib_utils.EX_UNAVAILABLE, err.Error()
+		return wzlib_utils.EX_UNAVAILABLE, nil, err
 	}
 
 	return cms.localCall(meta)
