@@ -9,7 +9,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/elastic/go-windows v1.0.1 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/infra-whizz/wzcmslib v0.0.0-20200709180606-764871b003ba
+	github.com/infra-whizz/wzcmslib v0.0.0-20200715161246-65a0527efc84
 	github.com/infra-whizz/wzlib v0.0.0-20200709175548-7accf26d7b69
 	github.com/isbm/go-nanoconf v0.0.0-20200623180822-caf90de1965e
 	github.com/nats-io/jwt v1.0.1 // indirect
