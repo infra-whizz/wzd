@@ -10,6 +10,7 @@ import (
 type WzCMS struct {
 	//stateIndex *nanocms_state.NanoStateIndex
 	compiler *nanocms_state.StateCompiler
+	pyexe    string
 }
 
 // NewWzCMS creates a CMS runner
@@ -20,6 +21,12 @@ func NewWzCMS(path ...string) *WzCMS {
 	return cms
 }
 
+// SetPyInterpreter shebang
+func (cms *WzCMS) SetPyInterpreter(pyexe string) *WzCMS {
+	cms.pyexe = pyexe
+	return cms
+}
+
 // Call a loaded and compiled state
 func (cms *WzCMS) localCall(meta *nanocms_state.NanoStateMeta) (int, []*nanocms_results.ResultLogEntry, error) {
 	retcode, err := cms.compiler.Compile(meta.Path)
@@ -27,7 +34,7 @@ func (cms *WzCMS) localCall(meta *nanocms_state.NanoStateMeta) (int, []*nanocms_
 		return retcode, nil, err
 	}
 
-	localRunner := nanocms_runners.NewLocalRunner()
+	localRunner := nanocms_runners.NewLocalRunner().SetPyInterpreter(cms.pyexe)
 	localRunner.AddStateRoots(cms.compiler.GetStateIndex().GetStateRoots()...)
 	localRunner.Run(cms.compiler.GetState())
 

@@ -2,6 +2,10 @@ transport:
   host: 123.123.123.123
   port: 4222
 
+ansible:
+  # Which python is used to run Ansible modules?
+  python: /usr/bin/python3
+
 daemon:
   # RSA public key fingerprint, that belongs to the cluster
   # This is the key that each incoming message is signed off with

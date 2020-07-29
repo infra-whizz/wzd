@@ -36,7 +36,8 @@ func runLocal(ctx *cli.Context) error {
 		os.Exit(wzlib_utils.EX_USAGE)
 	}
 
-	cms := wzd_runner.NewWzCMS(stateDir)
+	config := nanoconf.NewConfig(ctx.String("config"))
+	cms := wzd_runner.NewWzCMS(stateDir).SetPyInterpreter(config.Find("ansible").String("python", ""))
 	_, res, _ := cms.OfflineCallById(stateId)
 	for _, logEntry := range res {
 		logEntry.Log()
