@@ -7,10 +7,11 @@ require (
 	github.com/bramvdbogaerde/go-scp v0.0.0-20200518191442-5c8efdd1d925 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1
+	github.com/elastic/go-sysinfo v1.4.0 // indirect
 	github.com/elastic/go-windows v1.0.1 // indirect
 	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/infra-whizz/wzcmslib v0.0.0-20200715161246-65a0527efc84
-	github.com/infra-whizz/wzlib v0.0.0-20200709175548-7accf26d7b69
+	github.com/infra-whizz/wzcmslib v0.0.0-20200728171223-99e1a4114c1f
+	github.com/infra-whizz/wzlib v0.0.0-20200724114653-1b20fd7a54aa
 	github.com/isbm/go-nanoconf v0.0.0-20200623180822-caf90de1965e
 	github.com/nats-io/jwt v1.0.1 // indirect
 	github.com/nats-io/nats.go v1.10.0
@@ -22,9 +23,10 @@ require (
 	github.com/sirupsen/logrus v1.6.0 // indirect
 	github.com/urfave/cli/v2 v2.2.0
 	github.com/vmihailenco/msgpack/v4 v4.3.12 // indirect
-	go.starlark.net v0.0.0-20200707032745-474f21a9602d // indirect
-	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899 // indirect
+	go.starlark.net v0.0.0-20200723213555-f21d2f77688f // indirect
+	golang.org/x/crypto v0.0.0-20200728195943-123391ffb6de // indirect
 	golang.org/x/net v0.0.0-20200707034311-ab3426394381 // indirect
+	golang.org/x/sys v0.0.0-20200728102440-3e129f6d46b1 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
