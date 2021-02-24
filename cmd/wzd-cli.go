@@ -37,7 +37,9 @@ func runLocal(ctx *cli.Context) error {
 	}
 
 	config := nanoconf.NewConfig(ctx.String("config"))
-	cms := wzd_runner.NewWzCMS(stateDir).SetPyInterpreter(config.Find("ansible").String("python", ""))
+	cms := wzd_runner.NewWzCMS(stateDir).
+		SetPyInterpreter(config.Find("ansible").String("python", "")).
+		SetChrootedModules(ctx.String("modules-root"))
 	_, res, _ := cms.OfflineCallById(stateId)
 	for _, logEntry := range res {
 		logEntry.Log()
@@ -100,6 +102,12 @@ func main() {
 					Name:    "state",
 					Usage:   "The name of the state",
 					Aliases: []string{"s"},
+				},
+				&cli.StringFlag{
+					Name:    "modules-root",
+					Usage:   "Run all modules within an alternative root",
+					Value:   "/",
+					Aliases: []string{"r"},
 				},
 			},
 		},

@@ -9,8 +9,9 @@ import (
 
 type WzCMS struct {
 	//stateIndex *nanocms_state.NanoStateIndex
-	compiler *nanocms_state.StateCompiler
-	pyexe    string
+	compiler    *nanocms_state.StateCompiler
+	pyexe       string
+	modulesRoot string
 }
 
 // NewWzCMS creates a CMS runner
@@ -27,16 +28,25 @@ func (cms *WzCMS) SetPyInterpreter(pyexe string) *WzCMS {
 	return cms
 }
 
+//SetChrootedModules tells CMS to run all modules in own chroot rather then in "/"
+func (cmd *WzCMS) SetChrootedModules(root string) *WzCMS {
+	if root == "" {
+		root = "/"
+	}
+	cmd.modulesRoot = root
+	return cmd
+}
+
 // Call a loaded and compiled state
-func (cms *WzCMS) localCall(meta *nanocms_state.NanoStateMeta) (int, []*nanocms_results.ResultLogEntry, error) {
-	retcode, err := cms.compiler.Compile(meta.Path)
+func (cmd *WzCMS) localCall(meta *nanocms_state.NanoStateMeta) (int, []*nanocms_results.ResultLogEntry, error) {
+	retcode, err := cmd.compiler.Compile(meta.Path)
 	if err != nil {
 		return retcode, nil, err
 	}
 
-	localRunner := nanocms_runners.NewLocalRunner().SetPyInterpreter(cms.pyexe)
-	localRunner.AddStateRoots(cms.compiler.GetStateIndex().GetStateRoots()...)
-	localRunner.Run(cms.compiler.GetState())
+	localRunner := nanocms_runners.NewLocalRunner().SetPyInterpreter(cmd.pyexe).SetChrootPath(cmd.modulesRoot)
+	localRunner.AddStateRoots(cmd.compiler.GetStateIndex().GetStateRoots()...)
+	localRunner.Run(cmd.compiler.GetState())
 
 	results := nanocms_results.NewResultsToLog().LoadResults(localRunner.Response()).ToLog()
 
