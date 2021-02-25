@@ -28,6 +28,9 @@ endif
 strip:
 	strip $(OUT)
 
+compress:
+	upx -9 $(OUT)
+
 update-deps:
 	$(GO) get -u
 
