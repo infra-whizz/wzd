@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	wzd_runner "github.com/infra-whizz/wzd/runner"
 
@@ -18,9 +19,36 @@ func runDummy(ctx *cli.Context) error {
 	return nil
 }
 
+func containerProxy() {
+	// :c-<id>:chroot:module:jsonpath
+	if len(os.Args) > 2 && strings.HasPrefix(os.Args[2], ":c") {
+		args := strings.Split(os.Args[2], ":")
+		if len(args) == 5 {
+			args = args[1:]
+			conf := new(wzlib_utils.WzContainerParam)
+			conf.Root = args[1]
+			conf.Command = args[2]
+			conf.Args = []string{args[3]}
+			stdout, stderr, err := wzlib_utils.NewWzContainer(conf).Container()
+			fmt.Println("STDOUT:\n", stdout)
+			fmt.Println("STDERR:\n", stderr)
+			if err != nil {
+				fmt.Println("Error running container:", err.Error())
+				os.Exit(1)
+			}
+			os.Exit(0)
+		} else {
+			fmt.Println("Error parsing internal container args:", len(args))
+			os.Exit(1)
+		}
+	}
+}
+
 func runLocal(ctx *cli.Context) error {
 	stateId := ctx.String("state")
 	stateDir := ctx.String("dir")
+
+	containerProxy()
 
 	if stateId == "" || stateDir == "" {
 		if err := cli.ShowSubcommandHelp(ctx); err != nil {
