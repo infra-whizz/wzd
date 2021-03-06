@@ -14,7 +14,7 @@ require (
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/google/uuid v1.2.0 // indirect
 	github.com/infra-whizz/wzcmslib v0.0.0-20210225171912-247b9a4ae031
-	github.com/infra-whizz/wzlib v0.0.0-20210224220132-e126464e4e53
+	github.com/infra-whizz/wzlib v0.0.0-20210302184443-9c300336f5e1
 	github.com/isbm/go-nanoconf v0.0.0-20200623180822-caf90de1965e
 	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
@@ -27,15 +27,16 @@ require (
 	github.com/prometheus/procfs v0.6.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/shirou/gopsutil v3.21.2+incompatible // indirect
-	github.com/sirupsen/logrus v1.8.0 // indirect
+	github.com/sirupsen/logrus v1.8.0
+	github.com/thoas/go-funk v0.7.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.4 // indirect
 	github.com/urfave/cli/v2 v2.3.0
 	github.com/vmihailenco/msgpack/v4 v4.3.12 // indirect
 	github.com/vmihailenco/tagparser v0.1.2 // indirect
-	go.starlark.net v0.0.0-20210223155950-e043a3d3c984 // indirect
+	go.starlark.net v0.0.0-20210305151048-6a590ae7f4eb // indirect
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 // indirect
 	golang.org/x/net v0.0.0-20210226172049-e18ecbb05110 // indirect
-	golang.org/x/sys v0.0.0-20210301091718-77cc2087c03b // indirect
+	golang.org/x/sys v0.0.0-20210305230114-8fe3ee5dd75b // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
