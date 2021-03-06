@@ -4,6 +4,7 @@ import (
 	nanocms_runners "github.com/infra-whizz/wzcmslib/nanorunners"
 	nanocms_results "github.com/infra-whizz/wzcmslib/nanorunners/results"
 	nanocms_state "github.com/infra-whizz/wzcmslib/nanostate"
+	wzlib_logger "github.com/infra-whizz/wzlib/logger"
 	wzlib_utils "github.com/infra-whizz/wzlib/utils"
 )
 
@@ -12,6 +13,7 @@ type WzCMS struct {
 	compiler    *nanocms_state.StateCompiler
 	pyexe       string
 	modulesRoot string
+	wzlib_logger.WzLogger
 }
 
 // NewWzCMS creates a CMS runner
