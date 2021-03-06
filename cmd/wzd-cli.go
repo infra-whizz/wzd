@@ -6,13 +6,21 @@ import (
 	"strings"
 
 	wzd_runner "github.com/infra-whizz/wzd/runner"
+	"github.com/sirupsen/logrus"
 
+	wzlib_logger "github.com/infra-whizz/wzlib/logger"
 	wzlib_utils "github.com/infra-whizz/wzlib/utils"
 
 	"github.com/infra-whizz/wzd"
 	"github.com/isbm/go-nanoconf"
 	"github.com/urfave/cli/v2"
 )
+
+func setLogger(ctx *cli.Context) {
+	if ctx.String("logformat") == "json" {
+		wzlib_logger.SetCurrentLogger(wzlib_logger.GetJSONLogger(logrus.DebugLevel, nil))
+	}
+}
 
 func runDummy(ctx *cli.Context) error {
 	cli.ShowAppHelpAndExit(ctx, wzlib_utils.EX_USAGE)
@@ -30,21 +38,24 @@ func containerProxy() {
 			conf.Command = args[2]
 			conf.Args = []string{args[3]}
 			stdout, stderr, err := wzlib_utils.NewWzContainer(conf).Container()
-			fmt.Println("STDOUT:\n", stdout)
-			fmt.Println("STDERR:\n", stderr)
+
+			os.Stdout.WriteString(stdout + "\n")
+			os.Stderr.WriteString(stderr + "\n")
 			if err != nil {
-				fmt.Println("Error running container:", err.Error())
+				os.Stderr.WriteString(fmt.Sprintf("Error running container: %s", err.Error()))
 				os.Exit(1)
 			}
 			os.Exit(0)
 		} else {
-			fmt.Println("Error parsing internal container args:", len(args))
+			os.Stderr.WriteString(fmt.Sprintf("Error parsing internal container args: %d", len(args)))
 			os.Exit(1)
 		}
 	}
 }
 
 func runLocal(ctx *cli.Context) error {
+	setLogger(ctx)
+
 	stateId := ctx.String("state")
 	stateDir := ctx.String("dir")
 
@@ -77,13 +88,14 @@ func runLocal(ctx *cli.Context) error {
 }
 
 func runDaemon(ctx *cli.Context) error {
+	setLogger(ctx)
 	daemon := wzd.NewWzDaemon()
 
 	config := nanoconf.NewConfig(ctx.String("config"))
 	cfgDaemon := config.Find("daemon")
 	if cfgDaemon == nil {
 		os.Exit(wzlib_utils.EX_USAGE)
-		daemon.GetLogger().Errorf("Configuration for daemon was not found in file", ctx.String("config"))
+		daemon.GetLogger().Errorf("Configuration for daemon was not found in file: %s", ctx.String("config"))
 	}
 
 	daemon.SetPkiDirectory(config.Find("daemon").String("pki", ""))
@@ -112,6 +124,12 @@ func main() {
 				Aliases:  []string{"c"},
 				Usage:    "Path to configuration file",
 				Required: false,
+			},
+			&cli.StringFlag{
+				Name:    "logformat",
+				Aliases: []string{"f"},
+				Usage:   "Log format. Choices: default, json",
+				Value:   "default",
 			},
 		},
 	}
