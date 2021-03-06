@@ -44,10 +44,9 @@ func (cmd *WzCMS) localCall(meta *nanocms_state.NanoStateMeta) (int, []*nanocms_
 		return retcode, nil, err
 	}
 
-	localRunner := nanocms_runners.NewLocalRunner().SetPyInterpreter(cmd.pyexe).SetChrootPath(cmd.modulesRoot)
-	localRunner.AddStateRoots(cmd.compiler.GetStateIndex().GetStateRoots()...)
+	localRunner := nanocms_runners.NewLocalRunner().SetPyInterpreter(cmd.pyexe).SetChrootPath(cmd.modulesRoot).
+		AddStateRoots(cmd.compiler.GetStateIndex().GetStateRoots()...)
 	localRunner.Run(cmd.compiler.GetState())
-
 	results := nanocms_results.NewResultsToLog().LoadResults(localRunner.Response()).ToLog()
 
 	return localRunner.Errcode(), results, nil
