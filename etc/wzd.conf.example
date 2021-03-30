@@ -1,0 +1,17 @@
+transport:
+  host: 127.0.0.1
+  port: 4222
+
+ansible:
+  python: /usr/bin/env python3
+
+daemon:
+  # RSA public key fingerprint, that belongs to the cluster
+  # This is the key that each incoming message is signed off with
+  cluster-fingerprint: de:ad:be:ef
+
+  # Directory, where RSA pki happening
+  pki: /etc/whizz/pki
+
+  # Traits configuration
+  traits: /etc/whizz/traits.conf
