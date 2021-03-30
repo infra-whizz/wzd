@@ -1,3 +1,4 @@
 cmd/wzd
 cmd/collection
 vendor/
+pkg/*.tar.gz
