@@ -15,7 +15,6 @@ require (
 	github.com/infra-whizz/wzlib v0.0.0-20210306212611-2af49aea1704
 	github.com/isbm/go-nanoconf v0.0.0-20200623180822-caf90de1965e
 	github.com/karrick/godirwalk v1.16.1 // indirect
-	github.com/magefile/mage v1.11.0 // indirect
 	github.com/nats-io/jwt v1.2.2 // indirect
 	github.com/nats-io/nats.go v1.10.0
 	github.com/nats-io/nkeys v0.3.0 // indirect
@@ -37,11 +36,3 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	howett.net/plist v0.0.0-20201203080718-1454fab16a06 // indirect
 )
-
-replace github.com/infra-whizz/wzlib => ../wzlib
-
-replace github.com/isbm/go-nanoconf => ../go-nanoconf
-
-replace github.com/infra-whizz/wzcmslib => ../wzcmslib
-
-replace github.com/infra-whizz/wzmodlib => ../wzmodlib
