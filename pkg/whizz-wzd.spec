@@ -10,7 +10,6 @@ Url:            https://gitlab.com/infra-whizz/wzd
 Source:         %{name}-%{version}.tar.gz
 Source1:        vendor.tar.gz
 
-#BuildRequires:  git-core
 BuildRequires:  golang-packaging
 BuildRequires:  golang(API) >= 1.13
 
@@ -23,16 +22,15 @@ The client component of Whizz configuration management system
 
 %build
 go build -x -mod=vendor -buildmode=pie -o wzd ./cmd/*.go
-#CGO_ENABLED=0 go build -a -mod=vendor -tags netgo -ldflags '-w -extldflags "-static"' -o %{name} ./cmd/*go
 
 %install
-install -D -m 0755 %{name} %{buildroot}%{_bindir}/%{name}
+install -D -m 0755 wzd %{buildroot}%{_bindir}/wzd
 mkdir -p %{buildroot}%{_sysconfdir}
 install -m 0644 ./etc/wzd.conf.example %{buildroot}%{_sysconfdir}/wzd.conf
 
 %files
 %defattr(-,root,root)
-%{_bindir}/%{name}
+%{_bindir}/wzd
 %dir %{_sysconfdir}
 %config /etc/wzd.conf
 
