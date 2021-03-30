@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Configuration
-P_NAME="sysroot-manager"
+P_NAME="whizz-client"
 P_APP="cmd/wzd-cli.go"
 P_SRC_DIRS=("runner" "events" "cmd")
-P_DOC_DIRS=()
-P_FILES=("LICENSE" "README.md" "go.mod" "go.sum" "wzdboot.go" "wzd_events.go", "wzd.go")
+P_DOC_DIRS=("etc")
+P_FILES=("LICENSE" "README.md" "go.mod" "go.sum" "wzdboot.go" "wzd_events.go" "wzd.go")
 P_CMD=("Makefile")
 
 set -e
