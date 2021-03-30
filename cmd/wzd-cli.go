@@ -16,6 +16,8 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+var VERSION string = "0.9"
+
 func setLogger(ctx *cli.Context) {
 	if ctx.String("logformat") == "json" {
 		wzlib_logger.SetCurrentLogger(wzlib_logger.GetJSONLogger(logrus.DebugLevel, nil))
@@ -114,7 +116,7 @@ func main() {
 	appname := "wzd"
 	confpath := nanoconf.NewNanoconfFinder(appname).DefaultSetup(nil)
 	app := &cli.App{
-		Version: "0.1 Alpha",
+		Version: VERSION,
 		Name:    appname,
 		Usage:   "Whizz Client Daemon",
 		Action:  runDummy,
